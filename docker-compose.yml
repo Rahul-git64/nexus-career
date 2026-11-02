@@ -1,4 +1,3 @@
-
 services:
   db:
     image: postgres:17
@@ -21,16 +20,16 @@ services:
       timeout: 5s
       retries: 5
 
-
-
-# ===== DevOps =====
   backend:
     build: ./backend
+    # Dev server with auto-reload; the image itself defaults to gunicorn.
     command: python manage.py runserver 0.0.0.0:8000
     environment:
       POSTGRES_HOST: db
       POSTGRES_PORT: "5432"
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-dev-only-insecure-key}
+      DJANGO_DEBUG: "True"
     ports:
       - "8000:8000"
     volumes:
@@ -38,6 +37,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
 volumes:
   nexus_postgres_data:
