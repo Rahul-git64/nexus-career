@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: nexus
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - postgres.yaml
+  - backend.yaml
+  - ingress.yaml
+
+# CD can override the tag with: kustomize edit set image nexus-career-backend=ghcr.io/<owner>/nexus-career-backend:<sha>
+images:
+  - name: nexus-career-backend
+    newTag: latest
