@@ -92,11 +92,11 @@ ASGI_APPLICATION = "config.asgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("PGDATABASE", "nexus_career"),
-        "USER": os.environ.get("PGUSER", "postgres"),
-        "PASSWORD": os.environ.get("PGPASSWORD", ""),
-        "HOST": os.environ.get("PGHOST", "127.0.0.1"),
-        "PORT": os.environ.get("PGPORT", "5432"),
+        "NAME": os.environ.get("PGDATABASE") or os.environ.get("POSTGRES_DB", "nexus_career"),
+        "USER": os.environ.get("PGUSER") or os.environ.get("POSTGRES_USER", "nexus_user"),
+        "PASSWORD": os.environ.get("PGPASSWORD") or os.environ.get("POSTGRES_PASSWORD", ""),
+        "HOST": os.environ.get("PGHOST") or os.environ.get("POSTGRES_HOST", "127.0.0.1"),
+        "PORT": os.environ.get("PGPORT") or os.environ.get("POSTGRES_PORT", "5432"),
         "CONN_MAX_AGE": 60,
     }
 }

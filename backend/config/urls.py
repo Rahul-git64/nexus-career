@@ -4,6 +4,7 @@ URL configuration for Nexus Career.
 """
 
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import include, path
 
 from drf_spectacular.views import (
@@ -12,9 +13,15 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+
+def health(request):
+    return JsonResponse({"status": "ok"})
+
+
 urlpatterns = [
     # Django Admin
     path("admin/", admin.site.urls),
+    path("health/", health, name="health"),
 
     # Nexus Career API
     path("api/v1/", include("api.v1.urls")),
